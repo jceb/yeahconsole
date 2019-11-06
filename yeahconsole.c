@@ -82,10 +82,9 @@ main(int argc, char *argv[])
 	XEvent event;
 	int hidden = 1;
 	int fullscreen = 0;
-	int i, tmp;
+	int i;
 	int old_height = 0;
-	Window tmpwin, last_focused, current_focused;
-	XWindowAttributes wa;
+	Window last_focused, current_focused;
 
 	/* strip the path from argv[0] if there is one */
 	progname = strrchr(argv[0], '/');
