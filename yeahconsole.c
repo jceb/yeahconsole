@@ -49,7 +49,8 @@ char *progname, command[256];
 int revert_to;
 int screen;
 int opt_x, opt_x_orig, opt_y, opt_y_orig, opt_width, opt_height, opt_delay,
-	opt_bw, opt_step, opt_xrandr, height, opt_restart, opt_restart_hidden;
+	opt_bw, opt_step, opt_xrandr, height, opt_restart, opt_restart_hidden,
+	opt_height_inc;
 char *opt_color;
 char *opt_term;
 KeySym opt_key;
@@ -288,6 +289,8 @@ get_defaults()
 	opt_restart_hidden = opt ? atoi(opt) : 0;
 	opt = XGetDefault(dpy, progname, "term");
 	opt_term = opt ? opt : "xterm";
+	opt = XGetDefault(dpy, progname, "heightIncrease");
+	opt_height_inc = opt ? atoi(opt) : 0;
 	opt = XGetDefault(dpy, progname, "toggleKey");
 	opt_key = opt ? grab_that_key(opt, numlockmask) : grab_that_key(def_key, numlockmask);
 	opt = XGetDefault(dpy, progname, "keySmaller");
@@ -316,9 +319,13 @@ get_height_inc()
 	long dummy;
 	size = XAllocSizeHints();
 	/* wait for terminal to initialize */
-	while (!size->height_inc)
-		XGetWMNormalHints(dpy, termwin, size, &dummy);
-	height_inc = size->height_inc;
+	if (!size->height_inc && opt_height_inc)
+		height_inc = opt_height_inc;
+	else {
+		while (!size->height_inc)
+			XGetWMNormalHints(dpy, termwin, size, &dummy);
+		height_inc = size->height_inc;
+	}
 	XFree(size);
 	return height_inc;
 }
@@ -442,6 +449,8 @@ init_command(int argc, char *argv[])
 		pos += sprintf(pos, "%s -b 0 -embed %d -name %s ", opt_term, (int) win, progname);
 	else if (strstr(opt_term, "st"))
 		pos += sprintf(pos, "%s -w %d -t %s ", opt_term, (int) win, progname);
+	else if (strstr(opt_term, "alacritty"))
+		pos += sprintf(pos, "%s --embed %d -t %s -d 1 1 ", opt_term, (int) win, progname);
 	else
 		pos += sprintf(pos, "%s -b 0 -into %d -name %s ", opt_term, (int)
 					   win, progname);

@@ -31,6 +31,8 @@ restart:        0 (default) or 1 should the terminal restart?
 term:           terminal to use (valid:urxvt, urxvtc, xterm(default))
 screenWidth:    width (defaults to display width)
 consoleHeight:  number of lines (defaults to 10)
+heightIncrease: number of pixels to increase the height of the window (defaults
+                to 0 because the terminal usually reports it)
 xOffset:        x position (defaults to 0)
 aniDelay:       delay for the slide animation (defaults to 40)
 stepSize:	    step size for the animation (defaults to 1)
