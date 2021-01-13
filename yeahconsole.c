@@ -449,7 +449,7 @@ init_command(int argc, char *argv[])
 	else if (strstr(opt_term, "st"))
 		pos += sprintf(pos, "%s -w %d -t %s ", opt_term, (int) win, progname);
 	else if (strstr(opt_term, "alacritty"))
-		pos += sprintf(pos, "%s --embed %d -t %s -d 1 1 ", opt_term, (int) win, progname);
+		pos += sprintf(pos, "%s --embed %d --title %s ", opt_term, (int) win, progname);
 	else
 		pos += sprintf(pos, "%s -b 0 -into %d -name %s ", opt_term, (int)
 					   win, progname);
