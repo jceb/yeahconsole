@@ -131,23 +131,12 @@ int main(int argc, char *argv[]) {
   while (1) {
     XNextEvent(dpy, &event);
     switch (event.type) {
-    case FocusOut:
-      /* Always keep input focus when visible */
-      if (!hidden)
-        /* XSetInputFocus(dpy, termwin, RevertToPointerRoot, CurrentTime); */
-        XRaiseWindow(dpy, win);
-      break;
+    case FocusIn:
+      XSetInputFocus(dpy, termwin, RevertToPointerRoot, CurrentTime);
+      XSync(dpy, False);
     case EnterNotify:
       XSetInputFocus(dpy, termwin, RevertToPointerRoot, CurrentTime);
       XSync(dpy, False);
-      break;
-    case LeaveNotify:
-      if (last_focused && event.xcrossing.detail != NotifyInferior) {
-        XRaiseWindow(dpy, win);
-        /* XSetInputFocus(dpy, last_focused, RevertToPointerRoot, CurrentTime);
-         */
-        XSync(dpy, False);
-      }
       break;
     case KeyPress:
       key = XKeycodeToKeysym(dpy, event.xkey.keycode, 0);
@@ -178,10 +167,8 @@ int main(int argc, char *argv[]) {
           XMapWindow(dpy, win);
           XRaiseWindow(dpy, win);
           XSetInputFocus(dpy, termwin, RevertToPointerRoot, CurrentTime);
+          XSync(dpy, False);
           hidden = 0;
-          XSync(dpy, False);
-          XSetInputFocus(dpy, termwin, RevertToPointerRoot, CurrentTime);
-          XSync(dpy, False);
         }
         break;
       }
