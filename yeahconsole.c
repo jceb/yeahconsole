@@ -134,7 +134,8 @@ int main(int argc, char *argv[]) {
     case FocusOut:
       /* Always keep input focus when visible */
       if (!hidden)
-        XSetInputFocus(dpy, termwin, RevertToPointerRoot, CurrentTime);
+        /* XSetInputFocus(dpy, termwin, RevertToPointerRoot, CurrentTime); */
+        XRaiseWindow(dpy, win);
       break;
     case EnterNotify:
       XSetInputFocus(dpy, termwin, RevertToPointerRoot, CurrentTime);
@@ -142,7 +143,9 @@ int main(int argc, char *argv[]) {
       break;
     case LeaveNotify:
       if (last_focused && event.xcrossing.detail != NotifyInferior) {
-        XSetInputFocus(dpy, last_focused, RevertToPointerRoot, CurrentTime);
+        XRaiseWindow(dpy, win);
+        /* XSetInputFocus(dpy, last_focused, RevertToPointerRoot, CurrentTime);
+         */
         XSync(dpy, False);
       }
       break;
@@ -205,7 +208,7 @@ int main(int argc, char *argv[]) {
           height = resize_inc;
         height = get_optimal_height(height);
         resize_term(opt_width, height);
-        XSetInputFocus(dpy, termwin, RevertToPointerRoot, CurrentTime);
+        /* XSetInputFocus(dpy, termwin, RevertToPointerRoot, CurrentTime); */
         XSync(dpy, False);
       }
       break;
