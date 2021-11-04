@@ -27,6 +27,7 @@
 
 /* Indentation: indent -brf -br -ut -ts4 -i4 -nsaf -nsai -nsaw -npcs *.c */
 
+#include <X11/Xatom.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/cursorfont.h>
@@ -466,6 +467,33 @@ void init_win() {
                    &dummy_color);
   XSetWindowBackground(dpy, win, color.pixel);
   XDefineCursor(dpy, win, cursor);
+  char *name = "yeahconsole";
+  Atom wmNetWmName = XInternAtom(dpy, "_NET_WM_NAME", 0);
+  XChangeProperty(dpy, win, wmNetWmName, XInternAtom(dpy, "UTF8_STRING", 0), 8,
+                  PropModeReplace, (unsigned char *)name, strlen(name));
+
+  Atom property[4];
+  property[0] = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE_UTILITY", 0);
+  property[1] = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE", 0);
+  XChangeProperty(dpy, win, property[1], XA_ATOM, 32, PropModeReplace,
+                  (unsigned char *)property, 1);
+  property[0] = XInternAtom(dpy, "_NET_WM_STATE_ABOVE", 0);
+  property[1] = XInternAtom(dpy, "_NET_WM_STATE_MODAL", 0);
+  property[2] = XInternAtom(dpy, "_NET_WM_STATE_SKIP_TASKBAR", 0);
+  property[3] = XInternAtom(dpy, "_NET_WM_STATE", 0);
+  XChangeProperty(dpy, win, property[3], XA_ATOM, 32, PropModeReplace,
+                  (unsigned char *)property, 3);
+  XClassHint class;
+  class.res_name = "Yeahconsole";
+  class.res_class = "Yeahconsole";
+  XSetClassHint(dpy, win, &class);
+  XTextProperty _name;
+  _name.value = (unsigned char *)name;
+  _name.encoding = XInternAtom(dpy, "UTF8_STRING", 0);
+  _name.format = 8;
+  _name.nitems = strlen(name);
+  XSetWMName(dpy, win, &_name);
+
   /* start unmaped */
   XUnmapWindow(dpy, win);
 }
