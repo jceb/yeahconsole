@@ -23,9 +23,6 @@ $(OBJECTS): $(SOURCES)
 clean:
 	rm -rf $(TARGET) $(OBJECTS)
 
-reindent: $(SOURCES)
-	indent -ts4 -i4 --braces-on-if-line -l120 --no-space-after-function-call-names $?
-
 install: $(TARGET) $(MAN)
 	$(INSTALL) -m 0755 $(TARGET) $(PREFIX)/bin
 
