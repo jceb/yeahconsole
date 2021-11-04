@@ -161,8 +161,9 @@ int main(int argc, char *argv[]) {
             XGrabServer(dpy);
             roll(DOWN);
             XUngrabServer(dpy);
-          } else if (opt_xrandr)
+          } else if (opt_xrandr) {
             update_geom(last_focused);
+          }
           XMoveWindow(dpy, win, opt_x, opt_y);
           XMapWindow(dpy, win);
           XRaiseWindow(dpy, win);
@@ -350,9 +351,13 @@ int get_screen_geom(Window last_focused, int *x, int *y, int *w, int *h) {
       *y = monitor_info->y;
       *w = monitor_info->width;
       *h = monitor_info->height;
+      XRRFreeCrtcInfo(monitor_info);
+      XRRFreeScreenResources(resources);
       return 1;
     }
   }
+  XRRFreeCrtcInfo(monitor_info);
+  XRRFreeScreenResources(resources);
   return 0;
 }
 
