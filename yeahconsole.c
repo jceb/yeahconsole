@@ -342,7 +342,7 @@ int get_screen_geom(Window last_focused, int *x, int *y, int *w, int *h) {
   int i;
   XWindowAttributes wa;
   XRRScreenResources *resources;
-  XRRCrtcInfo *monitor_info;
+  XRRCrtcInfo *monitor_info = NULL;
 
   XGetWindowAttributes(dpy, last_focused, &wa);
   /* TODO externalize resources */
@@ -363,7 +363,9 @@ int get_screen_geom(Window last_focused, int *x, int *y, int *w, int *h) {
       return 1;
     }
   }
-  XRRFreeCrtcInfo(monitor_info);
+  if (monitor_info) {
+    XRRFreeCrtcInfo(monitor_info);
+  }
   XRRFreeScreenResources(resources);
   return 0;
 }
