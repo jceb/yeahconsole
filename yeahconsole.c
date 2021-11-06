@@ -134,7 +134,14 @@ int main(int argc, char *argv[]) {
     case FocusIn:
       XSetInputFocus(dpy, termwin, RevertToPointerRoot, CurrentTime);
       XSync(dpy, False);
+    case FocusOut:
+      if (!hidden) {
+        /* Always keep window on top */
+        XRaiseWindow(dpy, win);
+      }
+      break;
     case EnterNotify:
+      XRaiseWindow(dpy, win);
       XSetInputFocus(dpy, termwin, RevertToPointerRoot, CurrentTime);
       XSync(dpy, False);
       break;
