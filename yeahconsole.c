@@ -108,7 +108,7 @@ int main(int argc, char *argv[]) {
              "consoleHeight:         10\n"
              "aniDelay:              40\n"
              "stepSize;              1\n"
-             "toggleKey:             ControlAlt+y\n"
+             "toggleKey:             Control+Alt+y\n"
              "keySmaller:            Control+KP_Subtract\n"
              "keyBigger:             Control+KP_Add\n"
              "keyFull:               Alt+F11\n",
@@ -505,7 +505,11 @@ void init_win() {
 void init_xterm(int move) {
   XEvent ev;
 
-  system(command);
+  int ret = system(command);
+  if (ret != 0) {
+    fprintf(stderr, "terminal failed to start with exit code: %d\n", ret);
+    exit(ret);
+  }
   while (1) {
     XMaskEvent(dpy, SubstructureNotifyMask, &ev);
     if (ev.type == CreateNotify || ev.type == MapNotify) {
