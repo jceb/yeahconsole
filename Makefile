@@ -24,7 +24,7 @@ clean:
 	rm -rf $(TARGET) $(OBJECTS)
 
 install: $(TARGET) $(MAN)
-	$(INSTALL) -m 0755 $(TARGET) $(PREFIX)/bin
+	$(INSTALL) -m 0755 $(TARGET) $(PREFIX)/bin/
 
 uninstall:
 	rm -f $(PREFIX)/bin/$(TARGET)
